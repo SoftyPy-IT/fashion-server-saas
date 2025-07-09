@@ -1,0 +1,195 @@
+swagger: '3.1.0'
+info:
+  title: Storefront API
+  version: 1.0.0
+paths:
+  /storefront/all:
+    get:
+      summary: Get all storefronts
+      tags:
+        - Storefront
+      responses:
+        200:
+          description: Successfully retrieved the storefront
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Storefront'
+        500:
+          description: Internal server error
+
+  /storefront/update/{id}:
+    put:
+      summary: Update a storefront
+      tags:
+        - Storefront
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the storefront to update
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                app_logo:
+                  type: string
+                  format: binary
+                app_name:
+                  type: string
+                about_short:
+                  type: string
+                about_long:
+                  type: string
+                contact_email:
+                  type: string
+                contact_phone:
+                  type: string
+                contact_address:
+                  type: string
+      responses:
+        200:
+          description: Successfully updated the storefront
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storefront'
+        400:
+          description: Bad request
+        404:
+          description: Storefront not found
+        500:
+          description: Internal server error
+
+  /storefront/upload-banners/{id}:
+    put:
+      summary: Upload banners to a storefront
+      tags:
+        - Storefront
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the storefront to update
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                banners:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: Successfully uploaded banners
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storefront'
+        400:
+          description: Bad request
+        404:
+          description: Storefront not found
+        500:
+          description: Internal server error
+
+  /storefront/manage-banners/{id}:
+    put:
+      summary: Manage banners (update status or delete) for a storefront
+      tags:
+        - Storefront
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the storefront to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  enum: [upload, update, delete]
+                  description: The operation to perform
+                bannerId:
+                  type: string
+                  description: The ID of the banner to update (required for update and delete operations)
+                is_active:
+                  type: boolean
+                  description: The new status of the banner (required for update operation)
+                banners:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: The list of banner files to upload (required for upload operation)
+      responses:
+        200:
+          description: Successfully managed banners
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storefront'
+        400:
+          description: Bad request
+        404:
+          description: Storefront or banner not found
+        500:
+          description: Internal server error
+
+components:
+  schemas:
+    Storefront:
+      type: object
+      properties:
+        _id:
+          type: string
+        app_name:
+          type: string
+        app_logo:
+          type: object
+          properties:
+            url:
+              type: string
+            public_id:
+              type: string
+        about_short:
+          type: string
+        about_long:
+          type: string
+        contact_email:
+          type: string
+        contact_phone:
+          type: string
+        contact_address:
+          type: string
+        banners:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              public_id:
+                type: string
+              is_active:
+                type: boolean

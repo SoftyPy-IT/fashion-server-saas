@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\softypy\\fashion\\fashion-client\\fashion-server\\fashion-server\\logs\\.a6d1b80a6a16b415c9ffcfee3f952bfc37470786-audit.json",
+    "files": [
+        {
+            "date": 1752036375345,
+            "name": "D:\\softypy\\fashion\\fashion-client\\fashion-server\\fashion-server\\logs\\combined-2025-07-09.log",
+            "hash": "195958b4609b4a77905c3d4fb43f2a3bf663d143b4aead38f6ed777bcc691974"
+        }
+    ],
+    "hashType": "sha256"
+}

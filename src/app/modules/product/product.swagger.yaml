@@ -1,0 +1,219 @@
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /product/all:
+    get:
+      tags:
+        - Product service
+      summary: Retrieve Product
+      responses:
+        '200':
+          description: Successful operation
+  /product/create:
+    post:
+      tags:
+        - Product service
+      summary: Create a Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201':
+          description: Product created successfully
+        '409':
+          description: Conflict - Product already exists
+        '500':
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+
+  /product/{id}:
+    get:
+      tags:
+        - Product service
+      summary: Get Product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      tags:
+        - Product service
+      summary: Update Product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product updated successfully
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - Product service
+      summary: Delete Product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          required: true
+        description:
+          type: string
+          minLength: 1
+          required: true
+        short_description:
+          type: string
+          minLength: 1
+          maxLength: 255
+          required: true
+        thumbnail:
+          $ref: '#/components/schemas/ThumbnailSchema'
+        price:
+          type: number
+          minimum: 0.01
+          required: true
+        discount_price:
+          type: number
+          minimum: 0
+        images:
+          $ref: '#/components/schemas/ImagesSchema'
+        categories:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        tags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        brand:
+          type: string
+          minLength: 1
+          required: true
+        stock:
+          type: number
+          minimum: 0
+          required: true
+        is_available:
+          type: boolean
+        is_featured:
+          type: boolean
+        is_active:
+          type: boolean
+        colors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColorSchema'
+          minItems: 1
+        sizes:
+          type: array
+          items:
+            type: string
+            enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+          minItems: 1
+        faq:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaqSchema'
+          minItems: 1
+        meta_title:
+          type: string
+        meta_description:
+          type: string
+        meta_keywords:
+          type: string
+        deletedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+
+    ThumbnailSchema:
+      type: object
+      properties:
+        url:
+          type: string
+          minLength: 1
+        public_id:
+          type: string
+          minLength: 1
+
+    ImagesSchema:
+      type: array
+      items:
+        $ref: '#/components/schemas/ImageSchema'
+
+    ImageSchema:
+      type: object
+      properties:
+        url:
+          type: string
+          minLength: 1
+        public_id:
+          type: string
+          minLength: 1
+
+    ColorSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        code:
+          type: string
+          minLength: 1
+
+    FaqSchema:
+      type: object
+      properties:
+        question:
+          type: string
+          minLength: 1
+        answer:
+          type: string
+          minLength: 1

@@ -1,0 +1,160 @@
+---
+components:
+  schemas:
+    CreateSupplier:
+      properties:
+        address:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 100
+          minLength: 1
+          type: string
+        company:
+          maxLength: 255
+          minLength: 1
+          type: string
+        country:
+          maxLength: 100
+          minLength: 1
+          type: string
+        emailAddress:
+          format: email
+          type: string
+        gstNumber:
+          maxLength: 50
+          type: string
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        phone:
+          pattern: ^(\\+88|0088)?(01[3456789]{1}[0-9]{8})$
+          type: string
+        postalCode:
+          maxLength: 20
+          type: string
+        state:
+          maxLength: 100
+          type: string
+        vatNumber:
+          maxLength: 50
+          type: string
+      required:
+        - company
+        - name
+        - emailAddress
+        - phone
+        - address
+        - city
+        - country
+      type: object
+    UpdateSupplier:
+      properties:
+        address:
+          maxLength: 255
+          minLength: 1
+          type: string
+        city:
+          maxLength: 100
+          minLength: 1
+          type: string
+        company:
+          maxLength: 255
+          minLength: 1
+          type: string
+        country:
+          maxLength: 100
+          minLength: 1
+          type: string
+        emailAddress:
+          format: email
+          type: string
+        gstNumber:
+          maxLength: 50
+          type: string
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        phone:
+          pattern: ^(\\+88|0088)?(01[3456789]{1}[0-9]{8})?$
+          type: string
+        postalCode:
+          maxLength: 20
+          type: string
+        state:
+          maxLength: 100
+          type: string
+        vatNumber:
+          maxLength: 50
+          type: string
+      type: object
+info:
+  title: Supplier API Documentation
+  version: 1.0.0
+paths:
+  /suppliers/all:
+    get:
+      responses:
+        '200':
+          description: A list of suppliers
+      summary: Retrieve all suppliers
+  /suppliers/create:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSupplier'
+        required: true
+      responses:
+        '200':
+          description: Successfully created a new supplier
+      summary: Create a new supplier
+  /suppliers/update/{id}:
+    delete:
+      parameters:
+        - description: ID of the supplier to delete
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted the supplier
+      summary: Delete a supplier by ID
+    put:
+      parameters:
+        - description: ID of the supplier to update
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSupplier'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated the supplier
+      summary: Update an existing supplier by ID
+  /suppliers/{id}:
+    get:
+      parameters:
+        - description: ID of the supplier to retrieve
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Supplier details
+      summary: Retrieve a supplier by ID
+swagger: 3.1.0

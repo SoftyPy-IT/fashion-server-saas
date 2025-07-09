@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Invoice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @page {
+            size: A4;
+        }
+        :root {
+            --brand-light1: #d5e4e9;
+            --brand-light2: #cad9de;
+            --brand-main: #134865;
+            --brand-light3: #b6c7cc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #555;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            background-color: var(--brand-light1);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            page-break-inside: avoid;
+            flex: 1;
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--brand-main);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 150px;
+            height: auto;
+        }
+        .company-details {
+            text-align: right;
+            font-size: 14px;
+        }
+        .company-details h2 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--brand-main);
+            font-weight: 600;
+        }
+        .invoice-details {
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .invoice-details h1 {
+            font-size: 28px;
+            margin: 0;
+            color: var(--brand-main);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        .invoice-details h1:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background-color: var(--brand-light3);
+        }
+        .invoice-details .meta {
+            margin-top: 20px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--brand-light1);
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .meta div {
+            margin: 3px 0;
+        }
+        .meta__customer {
+            margin-top: 20px;
+            text-align: left;
+            background-color: var(--brand-light2);
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid var(--brand-main);
+        }
+        .meta__customer div {
+            margin: 5px 0;
+        }
+        .billing-shipping {
+            margin-top: 20px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .address {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--brand-light3);
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .address h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: var(--brand-main);
+            border-bottom: 1px solid var(--brand-light2);
+            padding-bottom: 8px;
+        }
+        .items {
+            margin-top: 25px;
+        }
+        .items h3 {
+            color: var(--brand-main);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .items table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .items table th, .items table td {
+            padding: 12px 15px;
+            border: 1px solid var(--brand-light3);
+            text-align: left;
+        }
+        .items table th {
+            background-color: var(--brand-main);
+            color: white;
+            font-weight: 600;
+        }
+        .items table tr:nth-child(even) {
+            background-color: var(--brand-light1);
+        }
+        .total {
+            margin-top: 25px;
+            text-align: right;
+            font-size: 14px;
+            background-color: var(--brand-light2);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .total .total-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+            gap: 30px;
+        }
+        .total .total-row:last-child {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid var(--brand-main);
+            color: var(--brand-main);
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 2px solid var(--brand-main);
+            padding-top: 15px;
+        }
+        .footer a {
+            color: var(--brand-main);
+            text-decoration: none;
+        }
+        .social-media {
+            margin-top: 15px;
+        }
+        .social-media a {
+            display: inline-block;
+            margin: 0 8px;
+            color: var(--brand-main);
+            text-decoration: none;
+            font-size: 16px;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: var(--brand-light1);
+            transition: all 0.3s ease;
+        }
+        .social-media a:hover {
+            background-color: var(--brand-main);
+            color: white;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .company-details {
+                text-align: center;
+                margin-top: 15px;
+            }
+            .billing-shipping {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .address {
+                width: auto;
+            }
+            .meta {
+                flex-direction: column;
+            }
+            .total .total-row {
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .items table {
+                font-size: 12px;
+            }
+            .items table th, .items table td {
+                padding: 8px;
+            }
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="<%= storefront.logo %>" alt="<%= storefront.shopName %> Logo"/>
+            <div class="company-details">
+                <h2><%= storefront.shopName %></h2>
+                <div><%= storefront.contact.address %></div>
+                <div><%= storefront.contact.email %></div>
+                <div><%= storefront.contact.phone %></div>
+            </div>
+        </div>
+        <div class="invoice-details">
+            <h1>Invoice</h1>
+            <div class="meta">
+                <div>Invoice #: <%= order._id %></div>
+                <div>Created: <%= new Date().toLocaleDateString() %></div>
+            </div>
+            <div class="meta__customer">
+                <div><strong>Customer:</strong> <%= order.name %></div>
+                <div><strong>Email:</strong> <%= order.email %></div>
+                <div><strong>Phone:</strong> <%= order.phone %></div>
+            </div>
+        </div>
+        <div class="billing-shipping">
+            <div class="address">
+                <h3>Shipping Address</h3>
+                <p>
+                    <%= order.shippingAddress.line1 %>,
+                    <%= order.shippingAddress.city %>,
+                    <%= order.shippingAddress.postalCode %>,
+                    <%= order.shippingAddress.country %> <br>
+                    <%= order.shippingAddress.phone %>
+                </p>
+            </div>
+        </div>
+        <div class="items">
+            <h3>Order Items</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.orderItems.forEach(item => { %>
+                        <tr>
+                            <td><%= item.name %></td>
+                            <td><%= item.quantity %></td>
+                            <td>৳ <%= item.price %></td>
+                            <td>৳ <%= item.quantity * item.price %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <div class="total">
+            <div class="total-row">
+                <div>Subtotal:</div>
+                <div>৳ <%= order.subTotal %></div>
+            </div>
+            <div class="total-row">
+                <div>Discount:</div>
+                <div>৳ <%= order.discount %></div>
+            </div>
+            <div class="total-row">
+                <div>Tax:</div>
+                <div>৳ <%= order.tax %></div>
+            </div>
+            <div class="total-row">
+                <div>Total:</div>
+                <div>৳ <%= order.total %></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="social-media">
+            <a href="<%= storefront.socialMedia.facebook %>"><i class="fab fa-facebook-f"></i></a>
+            <a href="<%= storefront.socialMedia.twitter %>"><i class="fab fa-twitter"></i></a>
+            <a href="<%= storefront.socialMedia.instagram %>"><i class="fab fa-instagram"></i></a>
+            <a href="<%= storefront.socialMedia.linkedin %>"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; <%= new Date().getFullYear() %> <%= storefront.shopName %>. All rights reserved.</p>
+    </div>
+</body>
+</html>

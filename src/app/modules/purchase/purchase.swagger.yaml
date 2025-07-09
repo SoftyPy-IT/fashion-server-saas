@@ -1,0 +1,298 @@
+---
+components:
+  schemas:
+    CreatePurchase:
+      properties:
+        attachDocument:
+          properties:
+            publicId:
+              type: string
+            url:
+              format: uri
+              type: string
+          type: object
+        date:
+          format: date-time
+          type: string
+        discount:
+          type: string
+        items:
+          items:
+            properties:
+              discount:
+                type: string
+              product_code:
+                type: string
+              product_id:
+                pattern: ^[0-9a-fA-F]{24}$
+                type: string
+              product_name:
+                type: string
+              quantity:
+                type: string
+              sub_total:
+                type: string
+              tax:
+                type: string
+              unit_price:
+                type: string
+            type: object
+          type: array
+        note:
+          type: string
+        orderTax:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+        paymentTerms:
+          type: string
+        reference:
+          type: string
+        shipping:
+          type: string
+        status:
+          enum:
+            - Pending
+            - Ordered
+            - Received
+          type: string
+        supplier:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+      type: object
+    ErrorResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    Purchase:
+      properties:
+        attachDocument:
+          properties:
+            publicId:
+              type: string
+            url:
+              format: uri
+              type: string
+          type: object
+        date:
+          format: date-time
+          type: string
+        discount:
+          type: number
+        grand_total:
+          type: number
+        id:
+          type: string
+        items:
+          items:
+            properties:
+              discount:
+                type: number
+              product_code:
+                type: string
+              product_id:
+                type: string
+              product_name:
+                type: string
+              quantity:
+                type: number
+              sub_total:
+                type: number
+              tax:
+                type: number
+              unit_price:
+                type: number
+            type: object
+          type: array
+        note:
+          type: string
+        orderTax:
+          type: string
+        paymentTerms:
+          type: string
+        reference:
+          type: string
+        shipping:
+          type: number
+        status:
+          enum:
+            - Pending
+            - Ordered
+            - Received
+          type: string
+        supplier:
+          type: string
+        total:
+          type: number
+        total_discount:
+          type: number
+        total_quantity:
+          type: number
+        total_sub_total:
+          type: number
+        total_tax:
+          type: number
+      type: object
+    UpdatePurchase:
+      properties:
+        attachDocument:
+          properties:
+            publicId:
+              type: string
+            url:
+              format: uri
+              type: string
+          type: object
+        date:
+          format: date-time
+          type: string
+        discount:
+          type: string
+        items:
+          items:
+            properties:
+              discount:
+                type: string
+              product_code:
+                type: string
+              product_id:
+                pattern: ^[0-9a-fA-F]{24}$
+                type: string
+              product_name:
+                type: string
+              quantity:
+                type: string
+              sub_total:
+                type: string
+              tax:
+                type: string
+              unit_price:
+                type: string
+            type: object
+          type: array
+        note:
+          type: string
+        orderTax:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+        paymentTerms:
+          type: string
+        reference:
+          type: string
+        shipping:
+          type: string
+        status:
+          enum:
+            - Pending
+            - Ordered
+            - Received
+          type: string
+        supplier:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+      type: object
+info:
+  title: Purchase API Documentation
+  version: 1.0.0
+paths:
+  /purchases:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePurchase'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+          description: Purchase created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request
+      summary: Create a new purchase
+  /purchases/{id}:
+    delete:
+      parameters:
+        - description: The ID of the purchase to delete
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^[0-9a-fA-F]{24}$
+            type: string
+      responses:
+        '204':
+          description: Purchase deleted successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Purchase not found
+      summary: Delete a purchase by ID
+    get:
+      parameters:
+        - description: The ID of the purchase to retrieve
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^[0-9a-fA-F]{24}$
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+          description: Purchase retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Purchase not found
+      summary: Get a purchase by ID
+    put:
+      parameters:
+        - description: The ID of the purchase to update
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^[0-9a-fA-F]{24}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePurchase'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+          description: Purchase updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Purchase not found
+      summary: Update a purchase by ID
+swagger: 3.1.0

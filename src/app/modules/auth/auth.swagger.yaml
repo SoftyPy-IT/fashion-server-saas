@@ -1,0 +1,231 @@
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth service
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: User created successfully
+        '409':
+          description: Conflict - User already exists
+        '500':
+          description: Internal Server Error
+
+  /auth/verify-email:
+    post:
+      tags:
+        - Auth service
+      summary: Verify a user's email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+  /auth/login:
+    post:
+      tags:
+        - Auth service
+      summary: Login a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+  /auth/refresh-token:
+    post:
+      tags:
+        - Auth service
+      summary: Refresh token
+      requestBody:
+        required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+  /auth/forget-password:
+    post:
+      tags:
+        - Auth service
+      summary: Forgot password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgetPassword'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+  /auth/reset-password:
+    post:
+      tags:
+        - Auth service
+      summary: Reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+  /auth/logout:
+    post:
+      tags:
+        - Auth service
+      summary: Logout
+      requestBody:
+        required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        firstName:
+          type: string
+          default: John
+        lastName:
+          type: string
+          default: Doe
+        email:
+          type: string
+          default: johndoe@mail.com
+        password:
+          type: string
+          default: johnDoe20!@
+
+    EmailVerification:
+      type: object
+      required:
+        - token
+        - code
+      properties:
+        token:
+          type: string
+          default: '123456'
+        code:
+          type: string
+          default: '123456'
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          default: johndoe@mail.com
+        password:
+          type: string
+          default: johnDoe20!@
+
+    ForgetPassword:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          default: johndoe@mail.com
+
+    ResetPassword:
+      type: object
+      required:
+        - token
+        - password
+      properties:
+        token:
+          type: string
+          default: '123456'
+        password:
+          type: string
+          default: johnDoe20!@
+        confirmPassword:
+          type: string
+          default: johnDoe20!@
+
+    Profile:
+      type: object
+      properties:
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          example: johndoe@example.com
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe

@@ -1,0 +1,33 @@
+
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /blog:
+    get:
+      summary: Get all blog posts
+      responses:
+        '200':
+          description: A list of blog posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPost'
+    post:
+      summary: Create a new blog post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '201':
+          description: Blog post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'

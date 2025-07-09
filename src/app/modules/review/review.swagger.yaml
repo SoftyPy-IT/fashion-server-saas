@@ -1,0 +1,349 @@
+---
+components:
+  schemas:
+    AddReplyRequest:
+      properties:
+        comment:
+          example: Thank you for your feedback!
+          type: string
+        user:
+          example: 60d0fe4f5311236168a109ca
+          type: string
+      type: object
+    CreateReviewRequest:
+      properties:
+        comment:
+          example: Great product!
+          type: string
+        product:
+          example: 60d21b4667d0d8992e610c85
+          type: string
+        rating:
+          example: 5
+          type: number
+        user:
+          example: 60d0fe4f5311236168a109ca
+          type: string
+      type: object
+    ErrorResponse:
+      properties:
+        error:
+          example: Not Found
+          type: string
+        message:
+          example: This review is not found
+          type: string
+        statusCode:
+          example: 404
+          type: integer
+      type: object
+    HideReviewRequest:
+      properties:
+        isHidden:
+          example: true
+          type: boolean
+      type: object
+    Reply:
+      properties:
+        _id:
+          example: 60d21b4667d0d8992e610c86
+          type: string
+        comment:
+          example: Thank you for your feedback!
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        isHidden:
+          type: boolean
+        updatedAt:
+          format: date-time
+          type: string
+        user:
+          example: 60d0fe4f5311236168a109cb
+          type: string
+      type: object
+    Review:
+      properties:
+        _id:
+          example: 60d21b4667d0d8992e610c85
+          type: string
+        comment:
+          example: Great product!
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        isHidden:
+          type: boolean
+        product:
+          example: 60d21b4667d0d8992e610c85
+          type: string
+        rating:
+          example: 5
+          type: number
+        replies:
+          items:
+            $ref: '#/components/schemas/Reply'
+          type: array
+        updatedAt:
+          format: date-time
+          type: string
+        user:
+          example: 60d0fe4f5311236168a109ca
+          type: string
+      type: object
+    ReviewListResponse:
+      properties:
+        meta:
+          properties:
+            currentPage:
+              example: 1
+              type: integer
+            totalItems:
+              example: 100
+              type: integer
+            totalPages:
+              example: 10
+              type: integer
+          type: object
+        result:
+          items:
+            $ref: '#/components/schemas/Review'
+          type: array
+      type: object
+    UpdateReviewRequest:
+      properties:
+        comment:
+          example: Good product!
+          type: string
+        isHidden:
+          example: false
+          type: boolean
+        rating:
+          example: 4
+          type: number
+      type: object
+info:
+  title: Your API Documentation
+  version: 1.0.0
+openapi: 3.1.0
+paths:
+  /review/all:
+    get:
+      operationId: getAllReviews
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewListResponse'
+          description: OK
+      summary: Get all reviews
+  /review/hide/{id}:
+    patch:
+      operationId: hideReview
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HideReviewRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Hide or unhide a review by ID
+  /review/reply/{id}:
+    post:
+      operationId: addReply
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddReplyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Add a reply to a review
+  /review/reply/{reviewId}/hide/{replyId}:
+    patch:
+      operationId: hideReply
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: replyId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HideReviewRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Hide or unhide a reply by ID
+  /review/reply/{reviewId}/{replyId}:
+    delete:
+      operationId: deleteReply
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: replyId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: Reply deleted successfully
+                    type: string
+                  success:
+                    example: true
+                    type: boolean
+                type: object
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Delete a reply by ID
+  /review/{id}:
+    delete:
+      operationId: deleteReview
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: Review deleted successfully
+                    type: string
+                  success:
+                    example: true
+                    type: boolean
+                type: object
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Delete a review by ID
+    get:
+      operationId: getReviewById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Get a review by ID
+    put:
+      operationId: updateReview
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReviewRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+      summary: Update a review by ID

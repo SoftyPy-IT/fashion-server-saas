@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.couponRoutes = void 0;
+const express_1 = require("express");
+const coupon_controller_1 = require("./coupon.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const coupon_validation_1 = require("./coupon.validation");
+const optionalAuth_1 = __importDefault(require("../../middlewares/optionalAuth"));
+const router = (0, express_1.Router)();
+router.get('/all', (0, auth_1.default)('admin'), coupon_controller_1.couponController.getAllCoupon);
+router.get('/:id', coupon_controller_1.couponController.getCouponById);
+router.post('/apply', (0, optionalAuth_1.default)('user', 'admin'), (0, validateRequest_1.default)(coupon_validation_1.applyCouponSchema), coupon_controller_1.couponController.applyCoupon);
+router.post('/create', (0, auth_1.default)('admin'), (0, validateRequest_1.default)(coupon_validation_1.createCouponSchema), coupon_controller_1.couponController.createCoupon);
+router.put('/update/:id', (0, auth_1.default)('admin'), (0, validateRequest_1.default)(coupon_validation_1.updateCouponSchema), coupon_controller_1.couponController.updateCoupon);
+router.delete('/:id', (0, auth_1.default)('admin'), coupon_controller_1.couponController.deleteCoupon);
+exports.couponRoutes = router;

@@ -1,0 +1,121 @@
+/* eslint-disable no-unused-vars */
+import { Schema, Types, model } from 'mongoose';
+import { IProduct, IProductModel } from './product.interface';
+
+const productSchema = new Schema<IProduct, IProductModel>(
+  {
+    name: { type: String, required: true },
+    code: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    barcodeSymbology: {
+      type: String,
+      enum: ['CODE128', 'CODE39', 'CODE25', 'EAN13', 'EAN8', 'UPC-A', 'UPC-E'],
+      required: false
+    },
+    reviews: [{ type: Types.ObjectId, ref: 'Review', required: false }],
+    brand: { type: Types.ObjectId, ref: 'Brand', required: false },
+    mainCategory: {
+      type: Schema.Types.ObjectId,
+      ref: 'MainCategory',
+      required: true
+    },
+    category: { type: Types.ObjectId, ref: 'Category', required: false },
+    subCategory: { type: Types.ObjectId, ref: 'SubCategory', required: false },
+    productUnit: { type: Types.ObjectId, ref: 'Unit', required: false },
+    defaultSaleUnit: { type: Types.ObjectId, ref: 'Unit', required: false },
+    defaultPurchaseUnit: { type: Types.ObjectId, ref: 'Unit', required: false },
+    productCost: { type: Number, required: true },
+    price: { type: Number, required: true },
+    productTax: { type: Types.ObjectId, ref: 'Tax', required: false },
+    taxMethod: {
+      type: String,
+      enum: ['Exclusive', 'Inclusive', 'No Tax'],
+      required: false,
+      default: 'No Tax'
+    },
+    description: { type: String, required: true },
+    short_description: { type: String, required: true },
+    thumbnail: {
+      type: String,
+      required: true
+    },
+    supplier: { type: Types.ObjectId, ref: 'Supplier', required: false },
+    images: [{ type: String, required: true }],
+    discount_price: { type: Number, required: false, default: 0 },
+    tags: [{ type: String, required: true }],
+    stock: { type: Number, required: false, default: 0 },
+    quantity: { type: Number, required: false, default: 0 },
+    folder: { type: Types.ObjectId, ref: 'Folder', required: false },
+    is_available: { type: Boolean, required: false, default: true },
+    is_featured: { type: Boolean, required: false, default: false },
+    is_active: { type: Boolean, required: false, default: true },
+    total_sale: { type: Number, required: false, default: 0 },
+    rating: { type: Number, required: false, default: 1 },
+    faq: [
+      {
+        question: { type: String, required: true },
+        answer: { type: String, required: true }
+      }
+    ],
+    variants: [
+      {
+        _id: false,
+        name: { type: String, required: false },
+        values: [
+          {
+            _id: false,
+            name: { type: String, required: true },
+            value: { type: String, required: true },
+            quantity: { type: Number, required: false, default: 0 }
+          }
+        ]
+      }
+    ],
+    hasVariants: { type: Boolean, required: false, default: false },
+    meta_title: { type: String, required: false },
+    meta_description: { type: String, required: false },
+    meta_keywords: [{ type: String, required: false }],
+    deletedAt: { type: Date, required: false },
+    isDeleted: { type: Boolean, default: false },
+    size_chart: {
+      type: String,
+      required: false
+    }
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
+
+// Define text index for text search on name, description, and tags fields
+productSchema.index(
+  { name: 'text', description: 'text', tags: 'text' },
+  {
+    weights: {
+      name: 5,
+      description: 3,
+      tags: 1
+    }
+  }
+);
+
+// Virtuals
+productSchema.virtual('total_reviews').get(function () {
+  return this?.reviews?.length || 0;
+});
+
+// is_stockout virtual
+productSchema.virtual('is_stockout').get(function () {
+  return this.quantity <= 0;
+});
+
+// Static method to check if a product exists with the given name
+productSchema.statics.isProductExistWithName = async function (name: string) {
+  const product = await this.findOne({ name });
+  return !!product;
+};
+
+const Product = model<IProduct, IProductModel>('Product', productSchema);
+export default Product;

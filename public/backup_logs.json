@@ -1,0 +1,20 @@
+[
+  {
+    "status": "failed",
+    "error": "Command failed: mongodump --db=muissa-ecommerce --archive=D:\\bablu\\fashion\\fashion-server\\public\\muissa-ecommerce.gzip --gzip\n'mongodump' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "code": null,
+    "signal": null,
+    "backupStartTime": "2025-01-25T06:44:25.139Z",
+    "backupEndTime": "2025-01-25T06:44:25.174Z",
+    "archivePath": "D:\\bablu\\fashion\\fashion-server\\public\\muissa-ecommerce.gzip"
+  },
+  {
+    "status": "failed",
+    "error": "Command failed: mongodump --db=muissa-ecommerce --archive=D:\\bablu\\fashion\\fashion-server\\public\\muissa-ecommerce.gzip --gzip\n'mongodump' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "code": null,
+    "signal": null,
+    "backupStartTime": "2025-01-25T06:44:31.177Z",
+    "backupEndTime": "2025-01-25T06:44:31.189Z",
+    "archivePath": "D:\\bablu\\fashion\\fashion-server\\public\\muissa-ecommerce.gzip"
+  }
+]
