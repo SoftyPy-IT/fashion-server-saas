@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.purchaseRoutes = void 0;
+const express_1 = require("express");
+const purchase_controller_1 = require("./purchase.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const purchase_validation_1 = require("./purchase.validation");
+const cloudinary_1 = require("../../utils/cloudinary");
+const router = (0, express_1.Router)();
+router.get('/all', (0, auth_1.default)('admin'), purchase_controller_1.purchaseController.getAllPurchase);
+router.get('/:id', (0, auth_1.default)('admin'), purchase_controller_1.purchaseController.getPurchaseById);
+router.get('/pdf/:id', purchase_controller_1.purchaseController.generatePurchasePdf);
+router.post('/create', (0, auth_1.default)('admin'), cloudinary_1.upload.single('attachDocument'), (0, validateRequest_1.default)(purchase_validation_1.createPurchaseSchema), purchase_controller_1.purchaseController.createPurchase);
+router.put('/update/:id', (0, auth_1.default)('admin'), cloudinary_1.upload.single('attachDocument'), (0, validateRequest_1.default)(purchase_validation_1.updatePurchaseSchema), purchase_controller_1.purchaseController.updatePurchase);
+router.delete('/:id', (0, auth_1.default)('admin'), purchase_controller_1.purchaseController.deletePurchase);
+exports.purchaseRoutes = router;

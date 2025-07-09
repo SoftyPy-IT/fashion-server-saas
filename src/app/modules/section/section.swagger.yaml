@@ -1,0 +1,119 @@
+---
+components:
+  schemas:
+    Section:
+      properties:
+        description:
+          type: string
+        imageUrl:
+          type: string
+        products:
+          items:
+            type: string
+          type: array
+        subTitle:
+          type: string
+        title:
+          type: string
+      required:
+        - title
+        - subTitle
+        - description
+        - imageUrl
+        - products
+      type: object
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /all:
+    get:
+      description: Retrieve a list of all sections
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Section'
+                type: array
+          description: A list of sections
+      summary: Get all sections
+  /create:
+    post:
+      description: Create a new section
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Section'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Section'
+          description: Section created successfully
+      summary: Create a new section
+  /{id}:
+    delete:
+      description: Delete a section by its ID
+      parameters:
+        - description: The section ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Section deleted successfully
+        '404':
+          description: Section not found
+      summary: Delete section by ID
+    get:
+      description: Retrieve a section by its ID
+      parameters:
+        - description: The section ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Section'
+          description: A section object
+        '404':
+          description: Section not found
+      summary: Get section by ID
+    put:
+      description: Update the details of a section by its ID
+      parameters:
+        - description: The section ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Section'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Section'
+          description: Updated section object
+        '404':
+          description: Section not found
+      summary: Update section by ID
+swagger: 3.1.0

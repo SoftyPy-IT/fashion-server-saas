@@ -1,0 +1,201 @@
+---
+components:
+  schemas:
+    Coupon:
+      properties:
+        code:
+          example: SUMMER2023
+          type: string
+        discount:
+          example: 20
+          type: number
+        discountType:
+          enum:
+            - percentage
+            - flat
+          example: percentage
+          type: string
+        expiryDate:
+          example: 2023-12-31T00:00:00.000Z
+          format: date
+          type: string
+        id:
+          example: 60d5ec49f9f7e82530d170a2
+          type: string
+        isActive:
+          example: true
+          type: boolean
+        name:
+          example: Summer Sale
+          type: string
+        totalUsed:
+          example: 0
+          type: number
+      type: object
+    CreateCoupon:
+      properties:
+        code:
+          example: SUMMER2023
+          type: string
+        discount:
+          example: 20
+          type: number
+        discountType:
+          enum:
+            - percentage
+            - flat
+          example: percentage
+          type: string
+        expiryDate:
+          example: 2023-12-31T00:00:00.000Z
+          format: date
+          type: string
+        isActive:
+          example: true
+          type: boolean
+        name:
+          example: Summer Sale
+          type: string
+        totalUsed:
+          example: 0
+          type: number
+      required:
+        - name
+        - code
+        - discount
+        - discountType
+        - expiryDate
+      type: object
+    UpdateCoupon:
+      properties:
+        code:
+          example: SUMMER2023
+          type: string
+        discount:
+          example: 20
+          type: number
+        discountType:
+          enum:
+            - percentage
+            - flat
+          example: percentage
+          type: string
+        expiryDate:
+          example: 2023-12-31T00:00:00.000Z
+          format: date
+          type: string
+        isActive:
+          example: true
+          type: boolean
+        name:
+          example: Summer Sale
+          type: string
+        totalUsed:
+          example: 0
+          type: number
+      type: object
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /coupons/all:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Coupon'
+                type: array
+          description: A list of coupons
+      summary: Get all coupons
+      tags:
+        - Coupons
+  /coupons/create:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCoupon'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: Coupon created successfully
+        '400':
+          description: Invalid request
+      summary: Create a new coupon
+      tags:
+        - Coupons
+  /coupons/update/{id}:
+    put:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            example: 60d5ec49f9f7e82530d170a2
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCoupon'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: Coupon updated successfully
+        '400':
+          description: Invalid request
+        '404':
+          description: Coupon not found
+      summary: Update a coupon
+      tags:
+        - Coupons
+  /coupons/{id}:
+    delete:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            example: 60d5ec49f9f7e82530d170a2
+            type: string
+      responses:
+        '200':
+          description: Coupon deleted successfully
+        '404':
+          description: Coupon not found
+      summary: Delete a coupon
+      tags:
+        - Coupons
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            example: 60d5ec49f9f7e82530d170a2
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: The coupon data
+        '404':
+          description: Coupon not found
+      summary: Get a coupon by ID
+      tags:
+        - Coupons
+swagger: 3.1.0

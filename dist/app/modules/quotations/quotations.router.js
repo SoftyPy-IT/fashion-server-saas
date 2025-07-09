@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.quotationsRoutes = void 0;
+const express_1 = require("express");
+const quotations_controller_1 = require("./quotations.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const cloudinary_1 = require("../../utils/cloudinary");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const quotations_validation_1 = require("./quotations.validation");
+const router = (0, express_1.Router)();
+router.get('/all', (0, auth_1.default)('admin'), quotations_controller_1.quotationsController.getAllQuotations);
+router.get('/:id', (0, auth_1.default)('admin'), quotations_controller_1.quotationsController.getQuotationsById);
+router.get('/pdf/:id', quotations_controller_1.quotationsController.generateQuotationPdf);
+router.post('/create', (0, auth_1.default)('admin'), cloudinary_1.upload.single('attachDocument'), (0, validateRequest_1.default)(quotations_validation_1.createQuotationsSchema), quotations_controller_1.quotationsController.createQuotations);
+router.put('/update/:id', (0, auth_1.default)('admin'), cloudinary_1.upload.single('attachDocument'), (0, validateRequest_1.default)(quotations_validation_1.updateQuotationsSchema), quotations_controller_1.quotationsController.updateQuotations);
+router.delete('/:id', (0, auth_1.default)('admin'), quotations_controller_1.quotationsController.deleteQuotations);
+exports.quotationsRoutes = router;

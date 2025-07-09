@@ -1,0 +1,75 @@
+swagger: '3.1.0'
+info:
+  title: Offers API
+  version: 1.0.0
+
+paths:
+  /offers/all:
+    get:
+      tags:
+        - Offers service
+      summary: Retrieve Offers
+      responses:
+        '200':
+          description: Successful operation
+
+  /offers/create:
+    post:
+      tags:
+        - Offers service
+      summary: Create an Offer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferInput'
+      responses:
+        '201':
+          description: Offer created successfully
+        '409':
+          description: Conflict - Offer already exists
+        '500':
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+
+  /offers/{id}:
+    get:
+      tags:
+        - Offers service
+      summary: Get Offer by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      tags:
+        - Offers service
+      summary: Update Offer by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferInput'
+        responses:
+          '200':
+            description: Offer updated successfully
+          '404':
+            description: Offer not found
+          '500':
+            description: Internal Server Error
+      security:
+        - bearerAuth: []

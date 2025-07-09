@@ -1,0 +1,168 @@
+swagger: '3.1.0'
+info:
+  title: Tax API Documentation
+  version: 1.0.0
+paths:
+  /tax/all:
+    get:
+      summary: Retrieve all taxes
+      responses:
+        '200':
+          description: A list of taxes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tax'
+    servers:
+      - url: http://localhost:3000/api # Replace with your actual server URL
+
+  /tax/{id}:
+    get:
+      summary: Retrieve a tax by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Tax ID
+      responses:
+        '200':
+          description: A tax object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '404':
+          description: Tax not found
+
+  /tax/create:
+    post:
+      summary: Create a new tax
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaxRequest'
+      responses:
+        '201':
+          description: Successfully created a tax
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          description: Bad request
+        '409':
+          description: Conflict - Tax already exists
+
+  /tax/update/{id}:
+    put:
+      summary: Update an existing tax
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Tax ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaxRequest'
+      responses:
+        '200':
+          description: Successfully updated a tax
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          description: Bad request
+        '404':
+          description: Tax not found
+
+  /tax/delete/{id}:
+    delete:
+      summary: Delete a tax by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Tax ID
+      responses:
+        '204':
+          description: Tax deleted successfully
+        '404':
+          description: Tax not found
+
+components:
+  schemas:
+    Tax:
+      type: object
+      properties:
+        _id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        rate:
+          type: number
+        type:
+          type: string
+          enum:
+            - Fixed
+            - Percentage
+      required:
+        - code
+        - name
+        - rate
+        - type
+
+    CreateTaxRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        rate:
+          type: number
+        type:
+          type: string
+          enum:
+            - Fixed
+            - Percentage
+      required:
+        - code
+        - name
+        - rate
+        - type
+
+    UpdateTaxRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        rate:
+          type: number
+        type:
+          type: string
+          enum:
+            - Fixed
+            - Percentage
+      required:
+        - code
+        - name
+        - rate
+        - type

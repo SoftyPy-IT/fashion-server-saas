@@ -1,0 +1,212 @@
+---
+components:
+  schemas:
+    Quantity:
+      properties:
+        attachDocument:
+          nullable: true
+          type: string
+        date:
+          format: date-time
+          type: string
+        note:
+          type: string
+        products:
+          items:
+            properties:
+              productCode:
+                type: string
+              productId:
+                type: string
+              productName:
+                type: string
+              quantity:
+                type: integer
+              serialNumber:
+                nullable: true
+                type: string
+              type:
+                enum:
+                  - Subtraction
+                  - Addition
+                type: string
+              variant:
+                type: string
+            type: object
+          type: array
+        referenceNo:
+          type: string
+      required:
+        - date
+        - referenceNo
+        - products
+        - note
+      type: object
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /quantities:
+    get:
+      parameters:
+        - description: Query parameters for filtering, sorting, and pagination
+          in: query
+          name: query
+          required: false
+          schema:
+            properties:
+              limit:
+                type: integer
+              name:
+                type: string
+              page:
+                type: integer
+            type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalItems:
+                        type: integer
+                      totalPages:
+                        type: integer
+                    type: object
+                  result:
+                    items:
+                      $ref: '#/components/schemas/Quantity'
+                    type: array
+                type: object
+          description: A list of quantities
+        '500':
+          description: Internal server error
+      summary: Get all quantities
+      tags:
+        - Quantities
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quantity'
+        description: Quantity object that needs to be added
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quantity'
+          description: Quantity created
+        '500':
+          description: Internal server error
+      summary: Create a new quantity
+      tags:
+        - Quantities
+  /quantities/{id}:
+    delete:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Quantity deleted
+        '404':
+          description: Quantity not found
+        '500':
+          description: Internal server error
+      summary: Delete a quantity by ID
+      tags:
+        - Quantities
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quantity'
+          description: A quantity object
+        '404':
+          description: Quantity not found
+        '500':
+          description: Internal server error
+      summary: Get a quantity by ID
+      tags:
+        - Quantities
+    put:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quantity'
+        description: Quantity object that needs to be updated
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quantity'
+          description: Quantity updated
+        '404':
+          description: Quantity not found
+        '500':
+          description: Internal server error
+      summary: Update a quantity by ID
+      tags:
+        - Quantities
+  /upload:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                attachDocument:
+                  format: binary
+                  type: string
+              type: object
+        description: File to upload
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    description: URL of the uploaded file
+                    type: string
+                type: object
+          description: File uploaded
+        '400':
+          description: No file uploaded
+        '500':
+          description: Internal server error
+      summary: Upload an attachment
+      tags:
+        - Attachments
+servers:
+  - description: Local server
+    url: http://localhost:3000/api
+swagger: 3.1.0

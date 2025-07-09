@@ -1,0 +1,65 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\bablu\\fashion\\fashion-server\\logs\\.5204cd2b5b724bbe0fb79fceffc95d20a62cbbd9-audit.json",
+    "files": [
+        {
+            "date": 1747734777175,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-20.log",
+            "hash": "5e64732b9627be7c185adbb81d1dbff16505bc6ddac0e21478eaf6327a804db2"
+        },
+        {
+            "date": 1747801842956,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-21.log",
+            "hash": "2521b89e5c27a3f5ea064d50ff92ffb666424f0aa95feccc699c27f8e08128a4"
+        },
+        {
+            "date": 1747902060609,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-22.log",
+            "hash": "2f3ab1348f91baaf79d850d1154766867db86d9ca556a40d10fee0f773600e16"
+        },
+        {
+            "date": 1748060756223,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-24.log",
+            "hash": "1c8929cf6104b7c04cd06a35ce31699d396c6979d804f2ff78b78ce0b6a5915e"
+        },
+        {
+            "date": 1748148667381,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-25.log",
+            "hash": "6b1733cba032963d2d7c036c5756c34b4213bf125c174a31175e50ca84674a7b"
+        },
+        {
+            "date": 1748250669490,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-26.log",
+            "hash": "22c94f560751dc06c835ca8c343d669d2cfdadb806e85dcdb782656c8a5786cd"
+        },
+        {
+            "date": 1748320776454,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-27.log",
+            "hash": "479d098a68570369a5a97a311b0515f53a03e14cc082e2837151de7bb32e9b62"
+        },
+        {
+            "date": 1748495591534,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-29.log",
+            "hash": "974e0f24facff6053730f07242c838607de33a79a3914ba1812491d268176a1f"
+        },
+        {
+            "date": 1748671384745,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-05-31.log",
+            "hash": "492994ead9e158e62cdf7f018bfe533f42bc24d95b516b14f03c4f7852fc2057"
+        },
+        {
+            "date": 1748769397901,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-06-01.log",
+            "hash": "4b882c4b128c00c83ac402acac65875b82f22ff2d2338c0a267182deefd32d5e"
+        },
+        {
+            "date": 1748852657612,
+            "name": "D:\\bablu\\fashion\\fashion-server\\logs\\combined-2025-06-02.log",
+            "hash": "878f031f0d87a588223c16659b18e00b35b813f6ef87ed36d65235c340eb8ebd"
+        }
+    ],
+    "hashType": "sha256"
+}

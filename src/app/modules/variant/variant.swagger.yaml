@@ -1,0 +1,204 @@
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /products:
+    post:
+      summary: Create a new product
+      requestBody:
+        description: Product object that needs to be added to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid input
+
+  /products/{productId}:
+    get:
+      summary: Get a product by ID
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+
+  /products/{productId}/variants:
+    post:
+      summary: Add a variant to a product
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Variant object that needs to be added to the product
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Variant'
+      responses:
+        '201':
+          description: Variant added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+        '400':
+          description: Invalid input
+        '404':
+          description: Product not found
+
+  /variants:
+    get:
+      summary: Get all variants
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variant'
+
+  /variants/{variantId}:
+    get:
+      summary: Get a variant by ID
+      parameters:
+        - name: variantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+        '404':
+          description: Variant not found
+
+    put:
+      summary: Update a variant
+      parameters:
+        - name: variantId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Variant object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Variant'
+      responses:
+        '200':
+          description: Variant updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+        '400':
+          description: Invalid input
+        '404':
+          description: Variant not found
+
+    delete:
+      summary: Delete a variant
+      parameters:
+        - name: variantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Variant deleted
+        '404':
+          description: Variant not found
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+        variants:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        items:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: array
+              items:
+                type: object
+                additionalProperties:
+                  type: string
+        isDeleted:
+          type: boolean
+        deletedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

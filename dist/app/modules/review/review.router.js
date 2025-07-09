@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reviewRoutes = void 0;
+const express_1 = require("express");
+const review_controller_1 = require("./review.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const review_validation_1 = require("./review.validation");
+const router = (0, express_1.Router)();
+router.get('/all', review_controller_1.reviewController.getAllReviews);
+router.get('/:id', review_controller_1.reviewController.getReviewById);
+router.post('/create', (0, auth_1.default)('user', 'admin'), (0, validateRequest_1.default)(review_validation_1.createReviewSchema), review_controller_1.reviewController.createReview);
+router.put('/update/:id', (0, auth_1.default)('user', 'admin'), (0, validateRequest_1.default)(review_validation_1.updateReviewSchema), review_controller_1.reviewController.updateReview);
+router.delete('/:id', (0, auth_1.default)('admin', 'user'), review_controller_1.reviewController.deleteReview);
+router.patch('/hide/:id', (0, auth_1.default)('admin', 'user'), (0, validateRequest_1.default)(review_validation_1.hideReviewOrReplySchema), review_controller_1.reviewController.hideReview);
+router.post('/reply/:id', (0, auth_1.default)('user', 'admin'), (0, validateRequest_1.default)(review_validation_1.addReplySchema), review_controller_1.reviewController.addReply);
+router.patch('/reply/:reviewId/hide/:replyId', (0, auth_1.default)('admin', 'user'), (0, validateRequest_1.default)(review_validation_1.hideReviewOrReplySchema), review_controller_1.reviewController.hideReply);
+router.delete('/reply/:reviewId/:replyId', (0, auth_1.default)('admin', 'user'), review_controller_1.reviewController.deleteReply);
+exports.reviewRoutes = router;

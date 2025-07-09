@@ -1,0 +1,258 @@
+---
+components:
+  responses:
+    QuotationNotFound:
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                example: Quotation not found
+                type: string
+            type: object
+      description: Quotation not found
+  schemas:
+    AttachDocument:
+      properties:
+        publicId:
+          description: Public ID of the attached document
+          example: document_public_id
+          type: string
+        url:
+          description: URL of the attached document
+          example: https://example.com/document.pdf
+          format: uri
+          type: string
+      type: object
+    CreateQuotation:
+      allOf:
+        - $ref: '#/components/schemas/Quotation'
+        - required: [date, reference, Biller, tax, items]
+    Item:
+      properties:
+        discount:
+          description: Discount applied to the product
+          example: 2
+          format: double
+          type: number
+        product_code:
+          description: Code of the product
+          example: WIDGET123
+          type: string
+        product_id:
+          $ref: '#/components/schemas/ObjectId'
+        product_name:
+          description: Name of the product
+          example: Widget A
+          type: string
+        quantity:
+          description: Quantity of the product
+          example: 5
+          format: int32
+          type: integer
+        sub_total:
+          description: Sub-total for the item (calculated)
+          example: 95
+          format: double
+          type: number
+        tax:
+          description: Tax applied to the product
+          example: 1.5
+          format: double
+          type: number
+        unit_price:
+          description: Unit price of the product
+          example: 19.99
+          format: double
+          type: number
+      required:
+        - product_name
+        - product_code
+        - product_id
+        - unit_price
+        - quantity
+        - sub_total
+      type: object
+    ObjectId:
+      description: MongoDB ObjectId
+      example: 60d21b4667d0d8992e610c85
+      type: string
+    Quotation:
+      properties:
+        Biller:
+          $ref: '#/components/schemas/ObjectId'
+        attachDocument:
+          $ref: '#/components/schemas/AttachDocument'
+        customer:
+          $ref: '#/components/schemas/ObjectId'
+        date:
+          description: Date of the quotation
+          example: '2024-08-11T00:00:00Z'
+          format: date-time
+          type: string
+        discount:
+          description: Discount applied to the quotation
+          example: 10
+          format: double
+          type: number
+        items:
+          items:
+            $ref: '#/components/schemas/Item'
+          type: array
+        note:
+          description: Additional notes for the quotation
+          example: This is a special quotation.
+          type: string
+        reference:
+          description: Reference number of the quotation
+          example: QUOTE-001
+          type: string
+        shipping:
+          description: Shipping cost for the quotation
+          example: 15
+          format: double
+          type: number
+        status:
+          description: Status of the quotation
+          enum: ['Pending', 'Sent', 'Accepted', 'Rejected']
+          example: Pending
+          type: string
+        supplier:
+          $ref: '#/components/schemas/ObjectId'
+        tax:
+          $ref: '#/components/schemas/ObjectId'
+      required:
+        - date
+        - reference
+        - Biller
+        - tax
+        - discount
+        - shipping
+        - status
+        - supplier
+        - customer
+        - items
+      type: object
+    UpdateQuotation:
+      properties:
+        Biller:
+          $ref: '#/components/schemas/ObjectId'
+        attachDocument:
+          $ref: '#/components/schemas/AttachDocument'
+        customer:
+          $ref: '#/components/schemas/ObjectId'
+        date:
+          format: date-time
+          type: string
+        discount:
+          format: double
+          type: number
+        items:
+          items:
+            $ref: '#/components/schemas/Item'
+          type: array
+        note:
+          type: string
+        reference:
+          type: string
+        shipping:
+          format: double
+          type: number
+        status:
+          enum: ['Pending', 'Sent', 'Accepted', 'Rejected']
+          type: string
+        supplier:
+          $ref: '#/components/schemas/ObjectId'
+        tax:
+          $ref: '#/components/schemas/ObjectId'
+      type: object
+info:
+  description: API for managing quotations in an inventory system
+  title: Quotation Management API
+  version: 1.0.0
+paths:
+  /quotations:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Quotation'
+                type: array
+          description: A list of quotations
+      summary: Get all quotations
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuotation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+          description: Quotation created successfully
+      summary: Create a new quotation
+  /quotations/{id}:
+    delete:
+      parameters:
+        - description: ID of the quotation to delete
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '204':
+          description: Quotation deleted successfully
+        '404':
+          $ref: '#/components/responses/QuotationNotFound'
+      summary: Delete a specific quotation by ID
+    get:
+      parameters:
+        - description: ID of the quotation to retrieve
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+          description: Quotation retrieved successfully
+        '404':
+          $ref: '#/components/responses/QuotationNotFound'
+      summary: Get a specific quotation by ID
+    patch:
+      parameters:
+        - description: ID of the quotation to update
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuotation'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+          description: Quotation updated successfully
+        '404':
+          $ref: '#/components/responses/QuotationNotFound'
+      summary: Update a specific quotation by ID
+swagger: 3.1.0

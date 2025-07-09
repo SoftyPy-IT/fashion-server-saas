@@ -1,0 +1,120 @@
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /category/all:
+    get:
+      tags:
+        - Category service
+      summary: Retrieve Category
+      responses:
+        '200':
+          description: Successful operation
+
+  /category/{id}:
+    get:
+      tags:
+        - Category service
+      summary: Get Category by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+    put:
+      tags:
+        - Category service
+      summary: Update Category by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '200':
+          description: Category updated successfully
+        '404':
+          description: Category not found
+        '500':
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Category service
+      summary: Delete Category by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Category deleted successfully
+        '404':
+          description: Category not found
+        '500':
+          description: Internal Server Error
+
+  /category/create:
+    post:
+      tags:
+        - Category service
+      summary: Create a Category
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '201':
+          description: Category created successfully
+        '409':
+          description: Conflict - Category already exists
+        '500':
+          description: Internal Server Error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CategoryInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Category name
+          minLength: 3
+          maxLength: 100
+        icon:
+          type: string
+          description: Category icon
+          minLength: 3
+          maxLength: 100
+      required:
+        - name
+        - icon

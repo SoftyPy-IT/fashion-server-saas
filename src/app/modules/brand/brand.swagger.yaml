@@ -1,0 +1,132 @@
+swagger: '3.1.0'
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /brand/all:
+    get:
+      tags:
+        - Brand
+      summary: Retrieve all brands
+      responses:
+        '200':
+          description: Successful operation
+
+  /brand/{id}:
+    get:
+      tags:
+        - Brand
+      summary: Get brand by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+    delete:
+      tags:
+        - Brand
+      summary: Delete brand by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Brand deleted successfully
+        '404':
+          description: Brand not found
+        '500':
+          description: Internal Server Error
+
+  /brand/create:
+    post:
+      tags:
+        - Brand
+      summary: Create a brand
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBrandInput'
+      responses:
+        '201':
+          description: Brand created successfully
+        '500':
+          description: Internal Server Error
+
+  /brand/update/{id}:
+    put:
+      tags:
+        - Brand
+      summary: Update a brand by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBrandInput'
+      responses:
+        '200':
+          description: Brand updated successfully
+        '404':
+          description: Brand not found
+        '500':
+          description: Internal Server Error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateBrandInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          minLength: 2
+          maxLength: 255
+      required:
+        - name
+        - description
+
+    UpdateBrandInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          minLength: 2
+          maxLength: 255
+      required:
+        - name
+        - description
